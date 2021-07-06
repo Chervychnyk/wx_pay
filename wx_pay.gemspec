@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "faraday", '>= 1.0.0'
   s.add_runtime_dependency 'excon', '>= 0.27.4'
   s.add_runtime_dependency 'faraday-excon'
-  s.add_runtime_dependency 'faraday_middleware'
   s.add_runtime_dependency "activesupport", '>= 3.2'
 
   s.add_development_dependency "rake", '>= 12.3.3'

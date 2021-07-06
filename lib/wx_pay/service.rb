@@ -1,5 +1,3 @@
-require 'rest_client'
-require 'faraday_middleware'
 require 'json'
 require 'cgi'
 require 'securerandom'
@@ -580,7 +578,6 @@ module WxPay
           url: gateway_url,
           headers: { content_type: 'application/xml' }
         ) do |conn|
-          conn.response :xml,  :content_type => /\bxml$/
           conn.adapter :excon
         end
 
