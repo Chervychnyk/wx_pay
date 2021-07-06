@@ -1,4 +1,5 @@
 require 'rest_client'
+require 'faraday_middleware'
 require 'json'
 require 'cgi'
 require 'securerandom'
@@ -25,13 +26,9 @@ module WxPay
       }
       url = "https://api.weixin.qq.com/sns/oauth2/access_token"
 
-      ::JSON.parse(RestClient::Request.execute(
-        {
-          method: :get,
-          headers: {params: payload},
-          url: url
-        }.merge(options)
-      ), quirks_mode: true)
+      response = Faraday.get(url, payload)
+
+      ::JSON.parse(response.body)
     end
 
     def self.get_sandbox_signkey(mch_id = WxPay.mch_id, options = {})
@@ -55,13 +52,9 @@ module WxPay
       }
       url = "https://api.weixin.qq.com/sns/jscode2session"
 
-      ::JSON.parse(RestClient::Request.execute(
-        {
-          method: :get,
-          headers: {params: payload},
-          url: url
-        }.merge(options)
-      ), quirks_mode: true)
+      response = Faraday.get(url, payload)
+
+      ::JSON.parse(response.body)
     end
 
     INVOKE_UNIFIEDORDER_REQUIRED_FIELDS = [:body, :out_trade_no, :total_fee, :spbill_create_ip, :notify_url, :trade_type]
@@ -582,16 +575,18 @@ module WxPay
       def invoke_remote(url, payload, options = {})
         options = WxPay.extra_rest_client_options.merge(options)
         gateway_url = options.delete(:gateway_url) || get_gateway_url
-        url = "#{gateway_url}#{url}"
 
-        RestClient::Request.execute(
-          {
-            method: :post,
-            url: url,
-            payload: payload,
-            headers: { content_type: 'application/xml' }
-          }.merge(options)
-        )
+        conn = Faraday.new(
+          url: gateway_url,
+          headers: { content_type: 'application/xml' }
+        ) do |conn|
+          conn.response :xml,  :content_type => /\bxml$/
+          conn.adapter :excon
+        end
+
+        response = conn.post(url, payload)
+
+        response.body
       end
     end
   end

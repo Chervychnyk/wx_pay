@@ -46,10 +46,7 @@ WxPay.sandbox_mode = false # default is `false`
 WxPay.set_apiclient_by_pkcs12(File.read(pkcs12_filepath), pass)
 
 # if you want to use `generate_authorize_req` and `authenticate`
-WxPay.appsecret = 'YOUR_SECRET' 
-
-# optional - configurations for RestClient timeout, etc.
-WxPay.extra_rest_client_options = {timeout: 2, open_timeout: 3}
+WxPay.appsecret = 'YOUR_SECRET'
 ```
 
 If you need to use sandbox mode.
