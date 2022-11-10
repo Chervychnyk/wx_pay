@@ -35,7 +35,7 @@ module WxPay
         key: options.delete(:key) || WxPay.key,
         nonce_str: SecureRandom.uuid.tr('-', '')
       }
-      r = WxPay::Result.new(Hash.from_xml(invoke_remote("pay/getsignkey", xmlify_payload(params))))
+      r = WxPay::Result.new(Hash.from_xml(invoke_remote("sign/getsignkey", xmlify_payload(params))))
       yield r if block_given?
       r
     end
