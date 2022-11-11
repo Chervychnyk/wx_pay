@@ -35,7 +35,10 @@ module WxPay
         key: options.delete(:key) || WxPay.key,
         nonce_str: SecureRandom.uuid.tr('-', '')
       }
-      r = WxPay::Result.new(Hash.from_xml(invoke_remote("sign/getsignkey", xmlify_payload(params))))
+
+      options = { gateway_url: "https://api.mch.weixin.qq.com/xdc/apiv2getsignkey" }
+
+      r = WxPay::Result.new(Hash.from_xml(invoke_remote("sign/getsignkey", xmlify_payload(params), options)))
       yield r if block_given?
       r
     end
