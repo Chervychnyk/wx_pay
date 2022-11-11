@@ -3,6 +3,9 @@ require 'cgi'
 require 'securerandom'
 require 'active_support/core_ext/hash/conversions'
 
+require 'faraday'
+require 'faraday/http'
+
 module WxPay
   module Service
     GATEWAY_URL = 'https://api.mch.weixin.qq.com'.freeze
