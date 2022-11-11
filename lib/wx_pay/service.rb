@@ -593,7 +593,7 @@ module WxPay
 
         conn = Faraday.new(url: gateway_url) do |conn|
           conn.headers['Content-Type'] = 'application/xml'
-          conn.adapter :excon
+          conn.adapter :http
         end
 
         response = conn.post(url, payload)
